@@ -7,8 +7,8 @@
     <div class="col-md-6">
         <div class="card shadow">
             <div class="card-body">
-                <h2 class="card-title">Supprimer le post</h2>
-                <p>Êtes-vous sûr de vouloir supprimer "{{ post.titre }}" ?</p>
+                <h2 class="card-title">Supprimer le livre</h2>
+                <p>Êtes-vous sûr de vouloir supprimer "{{ livre.titre }}" ?</p>
                 <form method="post">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-danger">Oui, supprimer</button>

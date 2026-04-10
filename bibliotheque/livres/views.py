@@ -3,6 +3,7 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Q
+from django.core.exceptions import PermissionDenied
 from .forms import SignUpForm, LivreForm
 from .models import Livre
 
@@ -56,7 +57,7 @@ def livre_detail(request, pk):
 def livre_update(request, pk):
     livre = get_object_or_404(Livre, pk=pk)
     if request.user != livre.proprietaire:
-        return redirect('liste_livres')
+        return PermissionDenied
 
     if request.method == 'POST':
         form = LivreForm(request.POST, instance=livre)
@@ -71,7 +72,7 @@ def livre_update(request, pk):
 def livre_delete(request, pk):
     livre = get_object_or_404(Livre, pk=pk)
     if request.user != livre.proprietaire:
-        return redirect('liste_livres')
+        return PermissionDenied
 
     if request.method == 'POST':
         livre.delete()

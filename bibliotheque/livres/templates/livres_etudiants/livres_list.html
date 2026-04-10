@@ -1,21 +1,21 @@
 {# Django template #}
 {% extends 'base.html' %}
 
-{% block title %}Liste des Posts{% endblock %}
+{% block title %}Liste des Livres{% endblock %}
 
 {% block content %}
-<h1 class="mb-4">Liste des Posts</h1>
+<h1 class="mb-4">Liste des Livres</h1>
 
 <!-- Formulaire de recherche -->
 <div class="row mb-4">
     <div class="col-md-6 mx-auto">
-        <form method="get" action="{% url 'liste_posts' %}" class="d-flex" id="search-form">
+        <form method="get" action="{% url 'liste_livres' %}" class="d-flex" id="search-form">
             <input 
                 type="text" 
                 name="q" 
                 value="{{ query|default:'' }}" 
                 class="form-control me-2" 
-                placeholder="Rechercher un post..." 
+                placeholder="Rechercher un livre..." 
                 aria-label="Recherche" 
                 id="search-input"
             >
@@ -24,35 +24,32 @@
     </div>
 </div>
 
-<div class="row" id="post-list">
+<div class="row" id="livre-list">
     {% for post in page_obj %}
         <div class="col-md-4 mb-3">
             <div class="card h-100">
                 <div class="card-body">
                     <h5 class="card-title">
-                        <a href="{% url 'detail_post' post.pk %}" class="text-decoration-none">
-                            {{ post.titre }}
+                        <a href="{% url 'livre_detail' post.pk %}" class="text-decoration-none">
+                            {{ livre.titre }}
                         </a>
                     </h5>
                     <p class="card-text">
-                        Par {{ post.auteur.profiletudiant.prenom }} {{ post.auteur.profiletudiant.nom }}
-                    </p>
-                    <p class="card-text text-muted">
-                        {{ post.date_creation|date:"d M Y" }}
+                        Par {{ post.proprietaire.username}}
                     </p>
                 </div>
             </div>
         </div>
     {% empty %}
         <div class="col-12">
-            <p class="text-muted">Aucun post trouvé.</p>
+            <p class="text-muted">Aucun livre trouvé.</p>
         </div>
     {% endfor %}
 </div>
 
 <!-- Pagination -->
 {% if page_obj.has_other_pages %}
-<nav aria-label="Pagination des posts" class="mt-4">
+<nav aria-label="Pagination des livres" class="mt-4">
     <ul class="pagination justify-content-center">
 
         {% if page_obj.has_previous %}

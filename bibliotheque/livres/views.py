@@ -53,7 +53,7 @@ def livre_detail(request, pk):
     return render(request, 'livres_etudiants/livre_detail.html', {'livre': livre})
 
 @login_required
-def post_update(request, pk):
+def livre_update(request, pk):
     livre = get_object_or_404(Livre, pk=pk)
     if request.user != livre.proprietaire:
         return redirect('liste_livres')
@@ -68,7 +68,7 @@ def post_update(request, pk):
     return render(request, 'livres_etudiants/livre_form.html', {'form': form, 'action': 'Modifier'})
 
 @login_required
-def post_delete(request, pk):
+def livre_delete(request, pk):
     livre = get_object_or_404(Livre, pk=pk)
     if request.user != livre.proprietaire:
         return redirect('liste_livres')

@@ -1,0 +1,129 @@
+{# Django template #}
+{% extends 'base.html' %}
+
+{% block title %}Liste des Posts{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Liste des Posts</h1>
+
+<!-- Formulaire de recherche -->
+<div class="row mb-4">
+    <div class="col-md-6 mx-auto">
+        <form method="get" action="{% url 'liste_posts' %}" class="d-flex" id="search-form">
+            <input 
+                type="text" 
+                name="q" 
+                value="{{ query|default:'' }}" 
+                class="form-control me-2" 
+                placeholder="Rechercher un post..." 
+                aria-label="Recherche" 
+                id="search-input"
+            >
+            <button type="submit" class="btn btn-primary">Rechercher</button>
+        </form>
+    </div>
+</div>
+
+<div class="row" id="post-list">
+    {% for post in page_obj %}
+        <div class="col-md-4 mb-3">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <a href="{% url 'detail_post' post.pk %}" class="text-decoration-none">
+                            {{ post.titre }}
+                        </a>
+                    </h5>
+                    <p class="card-text">
+                        Par {{ post.auteur.profiletudiant.prenom }} {{ post.auteur.profiletudiant.nom }}
+                    </p>
+                    <p class="card-text text-muted">
+                        {{ post.date_creation|date:"d M Y" }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <div class="col-12">
+            <p class="text-muted">Aucun post trouvé.</p>
+        </div>
+    {% endfor %}
+</div>
+
+<!-- Pagination -->
+{% if page_obj.has_other_pages %}
+<nav aria-label="Pagination des posts" class="mt-4">
+    <ul class="pagination justify-content-center">
+
+        {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}">
+                    Précédent
+                </a>
+            </li>
+        {% else %}
+            <li class="page-item disabled">
+                <span class="page-link">Précédent</span>
+            </li>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+                <li class="page-item active">
+                    <span class="page-link">{{ num }}</span>
+                </li>
+            {% else %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ num }}{% if query %}&q={{ query }}{% endif %}">
+                        {{ num }}
+                    </a>
+                </li>
+            {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}">
+                    Suivant
+                </a>
+            </li>
+        {% else %}
+            <li class="page-item disabled">
+                <span class="page-link">Suivant</span>
+            </li>
+        {% endif %}
+
+    </ul>
+</nav>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    let timeout;
+
+    const searchInput = document.getElementById('search-input');
+    const searchForm = document.getElementById('search-form');
+
+    const hasQuery = "{{ query|default:'' }}" !== "";
+
+    if (searchInput && searchForm) {
+        searchInput.addEventListener('input', function () {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+                searchForm.submit();
+            }, 500);
+        });
+
+        if (hasQuery) {
+            searchInput.focus();
+            searchInput.setSelectionRange(
+                searchInput.value.length,
+                searchInput.value.length
+            );
+        }
+    }
+});
+</script>
+{% endblock %}

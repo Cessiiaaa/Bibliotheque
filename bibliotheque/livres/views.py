@@ -57,7 +57,7 @@ def livre_detail(request, pk):
 def livre_update(request, pk):
     livre = get_object_or_404(Livre, pk=pk)
     if request.user != livre.proprietaire:
-        return PermissionDenied
+        raise PermissionDenied
 
     if request.method == 'POST':
         form = LivreForm(request.POST, instance=livre)
@@ -72,7 +72,7 @@ def livre_update(request, pk):
 def livre_delete(request, pk):
     livre = get_object_or_404(Livre, pk=pk)
     if request.user != livre.proprietaire:
-        return PermissionDenied
+        raise PermissionDenied
 
     if request.method == 'POST':
         livre.delete()

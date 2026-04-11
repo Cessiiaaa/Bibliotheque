@@ -11,9 +11,9 @@
                 <div class="card-text">{{ livre.contenu|safe }}</div> 
                 <p class="card-text"><strong>Proprietaire :</strong> {{ livre.proprietaire.username }}</p>
                 
-                {% if user == liste.proprietaire %}
-                    <a href="{% url 'livre_upate' post.pk %}" class="btn btn-warning me-2">Modifier</a>
-                    <a href="{% url 'livre_delete' post.pk %}" class="btn btn-danger">Supprimer</a>
+                {% if user == livre.proprietaire %}
+                    <a href="{% url 'livre_update' livre.pk %}" class="btn btn-warning me-2">Modifier</a>
+                    <a href="{% url 'livre_delete' livre.pk %}" class="btn btn-danger">Supprimer</a>
                 {% endif %}
                 <a href="{% url 'liste_livres' %}" class="btn btn-outline-secondary mt-2">Retour à la liste</a>
             </div>
